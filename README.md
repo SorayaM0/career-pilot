@@ -1,70 +1,82 @@
 # CareerPilot ✦
 
-CareerPilot is a full-stack job application tracking platform designed to help users organize their job search, monitor application progress, and understand their recruiting pipeline.
+CareerPilot is a full-stack, AI-powered job application tracking platform designed to help job seekers organize applications, monitor progress, analyze their job search, and prepare more effectively for interviews.
 
-The application combines a React and TypeScript frontend with a Java Spring Boot REST API and PostgreSQL database. CareerPilot includes secure user authentication, user-specific application data, application lifecycle tracking, status history, search and filtering, and job search analytics.
+The application combines a React and TypeScript frontend with a Java Spring Boot REST API, PostgreSQL persistence, JWT-based authentication, and OpenAI-powered job description analysis.
 
 ---
 
-## ✨ Features
+## ✦ Features
 
-### Application Management
+### Job Application Management
 
-- Create, view, update, and delete job applications
-- Track company, position, location, application date, job posting URL, and job description
-- Manage application status across:
-  - Applied
-  - Interview
-  - Offer
-  - Rejected
-- View detailed information for individual applications
-- Search applications by company, position, and location
-- Filter applications by status
+- Create, view, edit, and delete job applications
+- Track company, position, location, status, date applied, job description, and job posting URL
+- Search and filter applications
+- View detailed information for each opportunity
+- Track application progress from Applied → Interview → Offer
+- Record rejected applications separately
 
-### Application Progress
+### Application Status History
 
-CareerPilot tracks application status changes over time.
+CareerPilot automatically records status changes for each application.
 
-Each application includes:
+Users can view a chronological history showing how an opportunity has moved through the hiring process.
 
-- Application progress timeline
-- Persistent status history
-- Timestamped status changes
-- Current application status
-
-Status history is stored in PostgreSQL rather than existing only in the frontend.
+Status history is persisted in PostgreSQL and retrieved through the backend REST API.
 
 ### Analytics Dashboard
 
-The analytics page provides an overview of the user's job search, including:
+CareerPilot provides job-search analytics including:
 
 - Total applications
+- Applications by status
 - Interview rate
 - Offer rate
-- Rejection rate
-- Application pipeline breakdown
-- Status distribution
-- Quick job-search insights
+- Pipeline overview
 
-### Authentication & Authorization
+This gives users a quick view of how their job search is progressing.
 
-CareerPilot includes a complete authentication flow using Spring Security and JWT authentication.
+### AI Career Assistant ✦
+
+CareerPilot integrates with the OpenAI API to analyze saved job descriptions.
+
+For an authenticated user's application, the AI assistant can identify:
+
+- Key skills
+- Technologies and tools
+- Resume keywords
+- Interview topics
+- Preparation priorities
+- Practical preparation recommendations
+
+AI responses are rendered as formatted Markdown for a cleaner and more readable experience.
+
+The AI endpoint also verifies application ownership before sending application data for analysis.
+
+---
+
+## ✦ Authentication & Authorization
+
+CareerPilot includes a complete authentication flow using Spring Security and JWT.
 
 Users can:
 
-- Create an account
+- Register an account
 - Log in securely
 - Maintain an authenticated session
 - Log out
 - Access protected application endpoints
 
-Passwords are hashed using BCrypt before being stored.
+Passwords are hashed using BCrypt.
 
-Application data is associated with the authenticated user, preventing users from accessing another user's applications or status history.
+JWT bearer tokens are used to authenticate protected API requests.
+
+Application queries are scoped to the authenticated user so users can only access applications that belong to their own account.
 
 ---
 
-## 🛠 Tech Stack
+## ✦ Tech Stack
 
 ### Frontend
 
@@ -72,6 +84,7 @@ Application data is associated with the authenticated user, preventing users fro
 - TypeScript
 - Vite
 - CSS
+- React Markdown
 - Fetch API
 
 ### Backend
@@ -82,243 +95,284 @@ Application data is associated with the authenticated user, preventing users fro
 - Spring Data JPA
 - Hibernate
 - REST APIs
-- JWT authentication
-- BCrypt password hashing
+- Maven
 
 ### Database
 
 - PostgreSQL
 
-### Development Tools
+### AI
 
-- Git
-- GitHub
-- Maven
-- VS Code
-- Postman / cURL
-
----
-
-## 🏗 Architecture
-
-CareerPilot follows a layered full-stack architecture:
-
-```text
-React + TypeScript
-        │
-        │ HTTP / JSON
-        ▼
-Spring Boot REST API
-        │
-        ▼
-Controller Layer
-        │
-        ▼
-Service Layer
-        │
-        ▼
-Repository Layer
-        │
-        ▼
-Spring Data JPA / Hibernate
-        │
-        ▼
-PostgreSQL
-```
-
-Authentication requests are handled through Spring Security and JWT-based authorization.
-
-```text
-User
- │
- ▼
-Login / Register
- │
- ▼
-Spring Security
- │
- ▼
-JWT Authentication
- │
- ▼
-Protected REST Endpoints
- │
- ▼
-User-Owned Application Data
-```
-
----
-
-## 🔐 Security
-
-CareerPilot implements authentication and resource-level authorization.
-
-Protected application requests include a JWT:
-
-```text
-Authorization: Bearer <token>
-```
-
-The backend extracts the authenticated user's identity from the token and scopes database operations to that user.
-
-For example, application retrieval is performed using ownership-aware repository queries rather than retrieving arbitrary applications by ID.
-
-This prevents one authenticated user from accessing another user's application data.
-
-Security features include:
-
-- Spring Security
-- JWT authentication
-- BCrypt password hashing
-- Stateless backend authentication
-- Protected REST endpoints
-- User-owned database records
-- Resource-level authorization
-
-> CareerPilot currently stores the JWT in browser local storage as a straightforward bearer-token approach for the portfolio implementation. A production deployment could further harden session handling using secure HttpOnly cookies and additional CSRF/XSS protections.
-
----
-
-## 📡 REST API
+- OpenAI API
+- OpenAI Java SDK
+- Responses API
 
 ### Authentication
 
+- JWT
+- BCrypt
+- Spring Security
+
+---
+
+## ✦ Architecture
+
 ```text
+┌───────────────────────────────┐
+│      React + TypeScript       │
+│                               │
+│ Dashboard                     │
+│ Applications                  │
+│ Application Details           │
+│ Analytics                     │
+│ AI Assistant                  │
+└───────────────┬───────────────┘
+                │
+                │ HTTP / JSON
+                │ JWT Bearer Token
+                ▼
+┌───────────────────────────────┐
+│       Spring Boot REST API    │
+│                               │
+│ Controllers                   │
+│ Services                      │
+│ Spring Security               │
+│ JWT Authentication Filter     │
+│ Spring Data JPA               │
+└───────────┬───────────┬───────┘
+            │           │
+            │           │
+            ▼           ▼
+┌──────────────────┐   ┌──────────────────┐
+│    PostgreSQL    │   │    OpenAI API    │
+│                  │   │                  │
+│ Users            │   │ Job Description  │
+│ Applications     │   │ Analysis         │
+│ Status History   │   │                  │
+└──────────────────┘   └──────────────────┘
+```
+
+---
+
+## ✦ Backend Architecture
+
+CareerPilot follows a layered backend architecture:
+
+```text
+Controller
+    ↓
+Service
+    ↓
+Repository
+    ↓
+PostgreSQL
+```
+
+### Controller Layer
+
+Handles HTTP requests and responses.
+
+### Service Layer
+
+Contains application business logic and user-ownership checks.
+
+### Repository Layer
+
+Uses Spring Data JPA to communicate with PostgreSQL.
+
+### Security Layer
+
+Spring Security and a JWT authentication filter protect authenticated routes and establish the current user identity.
+
+---
+
+## ✦ AI Request Flow
+
+CareerPilot's AI integration is intentionally connected to authenticated application data rather than accepting an arbitrary job description directly from the frontend.
+
+```text
+User selects application
+        ↓
+React sends authenticated request
+        ↓
+POST /api/ai/applications/{id}/analyze
+        ↓
+Spring Security validates JWT
+        ↓
+Backend identifies authenticated user
+        ↓
+Application ownership is verified
+        ↓
+Saved job description is loaded
+        ↓
+OpenAI Responses API
+        ↓
+Career analysis returned
+        ↓
+React renders formatted AI response
+```
+
+This keeps authorization checks on the backend and ensures users can only request analysis for applications they own.
+
+---
+
+## ✦ Example API Endpoints
+
+### Authentication
+
+```http
 POST /api/auth/register
 POST /api/auth/login
 ```
 
 ### Applications
 
-```text
+```http
 GET    /api/applications
-POST   /api/applications
 GET    /api/applications/{id}
+POST   /api/applications
 PUT    /api/applications/{id}
 DELETE /api/applications/{id}
 ```
 
 ### Application History
 
-```text
+```http
 GET /api/applications/{id}/history
 ```
 
-Application endpoints require authentication.
+### AI Analysis
+
+```http
+POST /api/ai/applications/{id}/analyze
+```
+
+Protected endpoints require a valid JWT bearer token.
 
 ---
 
-## 🗄 Data Model
+## ✦ AI Analysis Example
 
-CareerPilot currently uses three primary domain models:
-
-### User
-
-Stores account information and authentication credentials.
+The AI assistant analyzes the job description saved with an application and returns role-specific guidance organized into sections such as:
 
 ```text
-User
-├── id
-├── name
-├── email
-└── password
+KEY SKILLS
+- Backend development
+- REST API design
+- Object-oriented programming
+
+TECHNOLOGIES
+- Java
+- Spring
+- PostgreSQL
+
+RESUME KEYWORDS
+- REST APIs
+- Backend development
+- Database design
+
+INTERVIEW TOPICS
+- Java fundamentals
+- API design
+- SQL
+- Data structures
+
+PREPARATION ADVICE
+- Review Java and object-oriented programming concepts
+- Practice REST API design questions
+- Review SQL queries and relational database concepts
 ```
 
-### Job Application
-
-Stores job application information and belongs to a specific user.
-
-```text
-JobApplication
-├── id
-├── company
-├── position
-├── location
-├── status
-├── jobUrl
-├── dateApplied
-├── jobDescription
-└── user
-```
-
-### Application Status History
-
-Stores application lifecycle changes.
-
-```text
-ApplicationStatusHistory
-├── id
-├── status
-├── changedAt
-└── jobApplication
-```
-
-This allows CareerPilot to maintain a persistent history of how each application moves through the recruiting process.
+AI-generated guidance is intended to support preparation and should be verified against the original job posting.
 
 ---
 
-## 🎨 Interface
+## ✦ Project Structure
 
-CareerPilot uses a responsive custom interface built with React and CSS.
-
-The design includes:
-
-- Dashboard overview
-- Application cards
-- Search and filtering
-- Application details
-- Application progress timeline
-- Analytics dashboard
-- Login and registration
-- Add and edit application workflows
-- Responsive layouts
-
-The visual system uses a warm cream background, sage navigation, muted lavender accents, soft status colors, rounded cards, and subtle interaction states.
+```text
+career-pilot/
+│
+├── backend/
+│   ├── src/main/java/
+│   │   └── com/careerpilot/backend/
+│   │       ├── ai/
+│   │       ├── controller/
+│   │       ├── dto/
+│   │       ├── model/
+│   │       ├── repository/
+│   │       ├── security/
+│   │       └── service/
+│   │
+│   └── pom.xml
+│
+├── frontend/
+│   ├── src/
+│   │   ├── api/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── types/
+│   │   ├── App.tsx
+│   │   └── App.css
+│   │
+│   └── package.json
+│
+├── .gitignore
+└── README.md
+```
 
 ---
 
-## 🚀 Running the Project Locally
+## ✦ Running CareerPilot Locally
 
 ### Prerequisites
 
 Make sure you have installed:
 
-- Java
+- Java 21+
 - Maven
 - Node.js
 - npm
 - PostgreSQL
 
-### 1. Clone the repository
+---
+
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/SorayaM0/career-pilot.git
+git clone <your-repository-url>
 cd career-pilot
 ```
 
-### 2. Create the PostgreSQL database
+---
 
-Create a local PostgreSQL database:
+### 2. Configure PostgreSQL
 
-```sql
-CREATE DATABASE career_pilot;
+Create a PostgreSQL database:
+
+```text
+career_pilot
 ```
 
-Configure the backend database connection for your local PostgreSQL environment.
+Configure the database connection in the Spring Boot application configuration.
 
-Do not commit database passwords or other credentials to Git.
+Do not commit database passwords or other secrets to Git.
 
-### 3. Configure the JWT secret
+---
 
-CareerPilot expects the JWT signing secret through an environment variable.
+### 3. Configure Environment Variables
+
+CareerPilot requires environment variables for JWT authentication and AI functionality.
 
 ```bash
-export JWT_SECRET="your-secret-here"
+export JWT_SECRET="your-secret"
+export OPENAI_API_KEY="your-openai-api-key"
 ```
 
-Use a sufficiently strong secret appropriate for the JWT configuration.
+Never commit real secrets or API keys to the repository.
 
-### 4. Start the backend
+---
+
+### 4. Start the Backend
 
 ```bash
 cd backend
@@ -331,7 +385,9 @@ The backend runs at:
 http://localhost:8080
 ```
 
-### 5. Start the frontend
+---
+
+### 5. Start the Frontend
 
 Open another terminal:
 
@@ -347,91 +403,74 @@ The frontend runs at:
 http://localhost:5173
 ```
 
-Open the frontend URL in your browser and create an account.
+---
+
+## ✦ Security
+
+CareerPilot implements several backend security controls:
+
+- BCrypt password hashing
+- JWT authentication
+- Protected REST endpoints
+- Stateless Spring Security configuration
+- User-scoped application queries
+- Backend application ownership verification
+- Authenticated AI analysis requests
+- Secrets provided through environment variables rather than source code
+
+The current frontend uses browser local storage for JWT persistence. For a production system, an HttpOnly secure-cookie authentication design would be worth evaluating to further reduce exposure of authentication tokens to client-side JavaScript.
 
 ---
 
-## 🧠 Engineering Highlights
-
-CareerPilot was built to explore several important full-stack software engineering concepts:
-
-- Designing RESTful APIs with Spring Boot
-- Separating controller, service, and repository responsibilities
-- Mapping relational entities using JPA and Hibernate
-- Persisting application lifecycle history
-- Building authenticated React clients
-- Implementing JWT-based authentication
-- Hashing credentials with BCrypt
-- Protecting backend resources with Spring Security
-- Implementing user-level data ownership
-- Managing asynchronous frontend API state
-- Building reusable React components
-- Designing responsive application interfaces
-
----
-
-## 🗺 Roadmap
-
-CareerPilot is actively being developed.
-
-Planned improvements include:
-
-- [ ] Stronger backend request validation
-- [ ] Improved API error handling
-- [ ] Additional analytics and pipeline metrics
-- [ ] Applications-over-time visualization
-- [ ] Backend integration and security tests
-- [ ] Frontend tests
-- [ ] Docker containerization
-- [ ] Production deployment
-- [ ] API documentation
-- [ ] AI-assisted job description analysis
-- [ ] AI-generated interview preparation insights
-- [ ] Resume and job-description skill comparison
-
----
-
-## 🤖 Planned AI Career Assistant
-
-A future CareerPilot feature will integrate AI directly with stored application data.
-
-Rather than functioning as a generic chatbot, the assistant is planned to analyze job descriptions associated with applications and provide information such as:
-
-- Important skills and technologies
-- Job description keywords
-- Potential skill gaps
-- Resume improvement suggestions
-- Interview preparation topics
-- Role-specific interview questions
-
-This feature is currently part of the project roadmap and is **not yet included as a completed feature**.
-
----
-
-## 📌 Project Status
+## ✦ Current Development Status
 
 CareerPilot currently includes:
 
-- Full-stack React + Spring Boot architecture
-- PostgreSQL persistence
-- Application CRUD operations
-- Search and filtering
-- Application details
-- Application status history
-- Job search analytics
-- Registration and login
-- JWT authentication
-- BCrypt password hashing
-- Protected REST APIs
-- User-specific application ownership
-- Responsive custom UI
-
-Testing, containerization, production deployment, and AI integration are planned next.
+- [x] Full application CRUD
+- [x] PostgreSQL persistence
+- [x] Application search and filtering
+- [x] Application details
+- [x] Status history
+- [x] Application progress timeline
+- [x] Analytics dashboard
+- [x] User registration
+- [x] User login
+- [x] BCrypt password hashing
+- [x] JWT authentication
+- [x] Protected REST APIs
+- [x] Multi-user application ownership
+- [x] AI job description analysis
+- [x] Dedicated AI Assistant interface
+- [x] Formatted AI responses
+- [ ] Automated backend tests
+- [ ] Automated frontend tests
+- [ ] Docker containerization
+- [ ] Production deployment
 
 ---
 
-## 👩‍💻 Author
+## ✦ Planned Improvements
 
-**Soraya**
+Upcoming engineering work includes:
 
-Software engineering portfolio project focused on full-stack development, backend architecture, authentication, relational data modeling, and API design.
+- Automated backend and frontend testing
+- Stronger request validation
+- Improved API error handling
+- AI usage controls and error handling
+- Docker containerization
+- Production deployment
+- Additional analytics based on application history
+
+---
+
+## ✦ Why I Built CareerPilot
+
+Job searching involves more than keeping a list of applications. Candidates need to track opportunities, understand where they are in the hiring pipeline, identify patterns in their search, and prepare differently for each role.
+
+CareerPilot brings those workflows into one full-stack application while also serving as a practical exploration of backend architecture, authentication and authorization, relational data modeling, REST API design, frontend state management, and AI API integration.
+
+---
+
+## ✦ Author
+
+Built by Soraya M.
