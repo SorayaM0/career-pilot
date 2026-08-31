@@ -1,4 +1,4 @@
-# CareerPilot ✦
+# CareerPilot 
 
 CareerPilot is a full-stack, AI-powered job application tracking platform designed to help job seekers organize applications, monitor progress, analyze their job search, and prepare more effectively for interviews.
 
@@ -6,7 +6,7 @@ The application combines a React and TypeScript frontend with a Java Spring Boot
 
 ---
 
-## ✦ Features
+##  Features
 
 ### Job Application Management
 
@@ -37,7 +37,7 @@ CareerPilot provides job-search analytics including:
 
 This gives users a quick view of how their job search is progressing.
 
-### AI Career Assistant ✦
+### AI Career Assistant 
 
 CareerPilot integrates with the OpenAI API to analyze saved job descriptions.
 
@@ -56,7 +56,7 @@ The AI endpoint also verifies application ownership before sending application d
 
 ---
 
-## ✦ Authentication & Authorization
+##  Authentication & Authorization
 
 CareerPilot includes a complete authentication flow using Spring Security and JWT.
 
@@ -76,7 +76,7 @@ Application queries are scoped to the authenticated user so users can only acces
 
 ---
 
-## ✦ Tech Stack
+## Tech Stack
 
 ### Frontend
 
@@ -154,7 +154,7 @@ Application queries are scoped to the authenticated user so users can only acces
 
 ---
 
-## ✦ Backend Architecture
+## Backend Architecture
 
 CareerPilot follows a layered backend architecture:
 
@@ -192,23 +192,23 @@ CareerPilot's AI integration is intentionally connected to authenticated applica
 
 ```text
 User selects application
-        ↓
+        
 React sends authenticated request
-        ↓
+        
 POST /api/ai/applications/{id}/analyze
-        ↓
+        
 Spring Security validates JWT
-        ↓
+        
 Backend identifies authenticated user
-        ↓
+        
 Application ownership is verified
-        ↓
+        
 Saved job description is loaded
-        ↓
+        
 OpenAI Responses API
-        ↓
+        
 Career analysis returned
-        ↓
+        
 React renders formatted AI response
 ```
 
@@ -251,7 +251,7 @@ Protected endpoints require a valid JWT bearer token.
 
 ---
 
-## ✦ AI Analysis Example
+##  AI Analysis Example
 
 The AI assistant analyzes the job description saved with an application and returns role-specific guidance organized into sections such as:
 
@@ -287,7 +287,7 @@ AI-generated guidance is intended to support preparation and should be verified 
 
 ---
 
-## ✦ Project Structure
+##  Project Structure
 
 ```text
 career-pilot/
@@ -322,7 +322,7 @@ career-pilot/
 
 ---
 
-## ✦ Running CareerPilot Locally
+##  Running CareerPilot Locally
 
 ### Prerequisites
 
