@@ -339,7 +339,7 @@ Make sure you have installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-repository-url>
+git clone <https://github.com/SorayaM0/career-pilot>
 cd career-pilot
 ```
 
