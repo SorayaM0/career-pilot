@@ -365,12 +365,7 @@ CareerPilot requires environment variables for JWT authentication and AI functio
 
 ```bash
 export JWT_SECRET="your-secret"
-export OPENAI_API_KEY="your-openai-api-key"
-```
-
-Never commit real secrets or API keys to the repository.
-
----
+export OPENAI_API_KEY="your-openai-api-key
 
 ### 4. Start the Backend
 
