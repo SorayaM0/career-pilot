@@ -47,9 +47,8 @@ function AIAssistant({
   ] = useState("");
 
 
-  // =========================
   // SELECT FIRST APPLICATION
-  // =========================
+  
 
   useEffect(() => {
 
@@ -70,9 +69,9 @@ function AIAssistant({
   ]);
 
 
-  // =========================
+  
   // SELECTED APPLICATION
-  // =========================
+  
 
   const selectedApplication =
     applications.find(
@@ -82,9 +81,9 @@ function AIAssistant({
     );
 
 
-  // =========================
+ 
   // CHANGE APPLICATION
-  // =========================
+ 
 
   const handleApplicationChange = (
     applicationId: number
@@ -101,9 +100,9 @@ function AIAssistant({
   };
 
 
-  // =========================
+
   // AI ANALYSIS
-  // =========================
+ 
 
   const handleAnalyze =
     async () => {
@@ -239,19 +238,16 @@ function AIAssistant({
 
     };
 
-
-  // =========================
   // UI
-  // =========================
+ 
 
   return (
 
     <main className="main-content ai-assistant-page">
 
 
-      {/* =========================
-          HERO
-          ========================= */}
+      {/*  HERO
+          */}
 
       <section className="ai-page-hero">
 
@@ -284,9 +280,8 @@ function AIAssistant({
       </section>
 
 
-      {/* =========================
-          NO APPLICATIONS
-          ========================= */}
+      {/*NO APPLICATIONS
+        */}
 
       {applications.length === 0 ? (
 
