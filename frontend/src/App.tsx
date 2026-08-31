@@ -14,6 +14,7 @@ import Applications from "./pages/Applications";
 import Analytics from "./pages/Analytics";
 import ApplicationDetails from "./pages/ApplicationDetails";
 import AuthPage from "./pages/AuthPage";
+import AIAssistant from "./pages/AIAssistant";
 
 import {
   apiFetch,
@@ -493,6 +494,22 @@ function App() {
 
 
       {/* =====================
+          AI ASSISTANT PAGE
+          ===================== */}
+
+      {currentPage ===
+        "ai-assistant" && (
+
+        <AIAssistant
+          applications={
+            applications
+          }
+        />
+
+      )}
+
+
+      {/* =====================
           ANALYTICS PAGE
           ===================== */}
 
@@ -552,5 +569,6 @@ function App() {
 
   );
 }
+
 
 export default App;

@@ -7,7 +7,9 @@ public class AIAnalysisResponse {
     public AIAnalysisResponse() {
     }
 
-    public AIAnalysisResponse(String analysis) {
+    public AIAnalysisResponse(
+            String analysis
+    ) {
         this.analysis = analysis;
     }
 
@@ -15,7 +17,9 @@ public class AIAnalysisResponse {
         return analysis;
     }
 
-    public void setAnalysis(String analysis) {
+    public void setAnalysis(
+            String analysis
+    ) {
         this.analysis = analysis;
     }
 }

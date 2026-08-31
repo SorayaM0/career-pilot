@@ -78,7 +78,14 @@ function Sidebar({
 
         <button
           type="button"
-          className="nav-item"
+          className={`nav-item ${
+            currentPage === "ai-assistant"
+              ? "active"
+              : ""
+          }`}
+          onClick={() =>
+            onNavigate("ai-assistant")
+          }
         >
           <span className="nav-icon">
             ✦
