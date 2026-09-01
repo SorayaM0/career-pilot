@@ -1,4 +1,4 @@
-# CareerPilot 
+# CareerPilot
 
 CareerPilot is a full-stack, AI-powered job application tracking platform designed to help job seekers organize applications, monitor progress, analyze their job search, and prepare more effectively for interviews.
 
@@ -6,7 +6,31 @@ The application combines a React and TypeScript frontend with a Java Spring Boot
 
 ---
 
-##  Features
+## Application Preview
+
+### Dashboard
+
+![CareerPilot Dashboard](screenshots/careerpilot-dashboard.png)
+
+### Application Management
+
+![CareerPilot Add Application](screenshots/careerpilot-add-application.png)
+
+### AI Career Assistant
+
+![CareerPilot AI Career Assistant](screenshots/careerpilot-ai.png)
+
+### Analytics
+
+![CareerPilot Analytics](screenshots/careerpilot-analytics.png)
+
+### Authentication
+
+![CareerPilot Login](screenshots/careerpilot-login.png)
+
+---
+
+## Features
 
 ### Job Application Management
 
@@ -37,7 +61,7 @@ CareerPilot provides job-search analytics including:
 
 This gives users a quick view of how their job search is progressing.
 
-### AI Career Assistant 
+### AI Career Assistant
 
 CareerPilot integrates with the OpenAI API to analyze saved job descriptions.
 
@@ -56,7 +80,7 @@ The AI endpoint also verifies application ownership before sending application d
 
 ---
 
-##  Authentication & Authorization
+## Authentication & Authorization
 
 CareerPilot includes a complete authentication flow using Spring Security and JWT.
 
@@ -89,7 +113,7 @@ Application queries are scoped to the authenticated user so users can only acces
 
 ### Backend
 
-- Java
+- Java 21
 - Spring Boot
 - Spring Security
 - Spring Data JPA
@@ -113,9 +137,19 @@ Application queries are scoped to the authenticated user so users can only acces
 - BCrypt
 - Spring Security
 
+### Testing & Infrastructure
+
+- JUnit
+- Mockito
+- Spring Boot Test
+- Vitest
+- React Testing Library
+- Docker
+- Docker Compose
+
 ---
 
-## ✦ Architecture
+## Architecture
 
 ```text
 ┌───────────────────────────────┐
@@ -186,29 +220,29 @@ Spring Security and a JWT authentication filter protect authenticated routes and
 
 ---
 
-## ✦ AI Request Flow
+## AI Request Flow
 
 CareerPilot's AI integration is intentionally connected to authenticated application data rather than accepting an arbitrary job description directly from the frontend.
 
 ```text
 User selects application
-        
+        ↓
 React sends authenticated request
-        
+        ↓
 POST /api/ai/applications/{id}/analyze
-        
+        ↓
 Spring Security validates JWT
-        
+        ↓
 Backend identifies authenticated user
-        
+        ↓
 Application ownership is verified
-        
+        ↓
 Saved job description is loaded
-        
+        ↓
 OpenAI Responses API
-        
+        ↓
 Career analysis returned
-        
+        ↓
 React renders formatted AI response
 ```
 
@@ -216,7 +250,7 @@ This keeps authorization checks on the backend and ensures users can only reques
 
 ---
 
-## ✦ Example API Endpoints
+## Example API Endpoints
 
 ### Authentication
 
@@ -251,7 +285,7 @@ Protected endpoints require a valid JWT bearer token.
 
 ---
 
-##  AI Analysis Example
+## AI Analysis Example
 
 The AI assistant analyzes the job description saved with an application and returns role-specific guidance organized into sections such as:
 
@@ -287,7 +321,7 @@ AI-generated guidance is intended to support preparation and should be verified 
 
 ---
 
-##  Project Structure
+## Project Structure
 
 ```text
 career-pilot/
@@ -316,15 +350,58 @@ career-pilot/
 │   │
 │   └── package.json
 │
+├── screenshots/
+│   ├── careerpilot-login.png
+│   ├── careerpilot-dashboard.png
+│   ├── careerpilot-add-application.png
+│   ├── careerpilot-ai.png
+│   └── careerpilot-analytics.png
+│
+├── docker-compose.yml
 ├── .gitignore
 └── README.md
 ```
 
 ---
 
-##  Running CareerPilot Locally
+## Running CareerPilot Locally
 
-### Prerequisites
+CareerPilot can be run either with Docker or by starting the frontend and backend manually.
+
+### Option 1 — Docker
+
+#### Prerequisites
+
+- Docker
+- Docker Compose
+- OpenAI API key
+
+Clone the repository:
+
+```bash
+git clone https://github.com/SorayaM0/career-pilot.git
+cd career-pilot
+```
+
+Configure the required environment variables before starting the application.
+
+Then start the containers:
+
+```bash
+docker compose up --build
+```
+
+To stop CareerPilot:
+
+```bash
+docker compose down
+```
+
+---
+
+### Option 2 — Manual Setup
+
+#### Prerequisites
 
 Make sure you have installed:
 
@@ -334,16 +411,12 @@ Make sure you have installed:
 - npm
 - PostgreSQL
 
----
-
 ### 1. Clone the Repository
 
 ```bash
-git clone <https://github.com/SorayaM0/career-pilot>
+git clone https://github.com/SorayaM0/career-pilot.git
 cd career-pilot
 ```
-
----
 
 ### 2. Configure PostgreSQL
 
@@ -357,15 +430,14 @@ Configure the database connection in the Spring Boot application configuration.
 
 Do not commit database passwords or other secrets to Git.
 
----
-
 ### 3. Configure Environment Variables
 
 CareerPilot requires environment variables for JWT authentication and AI functionality.
 
 ```bash
 export JWT_SECRET="your-secret"
-export OPENAI_API_KEY="your-openai-api-key
+export OPENAI_API_KEY="your-openai-api-key"
+```
 
 ### 4. Start the Backend
 
@@ -379,8 +451,6 @@ The backend runs at:
 ```text
 http://localhost:8080
 ```
-
----
 
 ### 5. Start the Frontend
 
@@ -400,7 +470,49 @@ http://localhost:5173
 
 ---
 
-## ✦ Security
+## Testing
+
+CareerPilot includes automated tests for both the backend and frontend.
+
+### Backend
+
+The backend test suite covers areas including:
+
+- Authentication service behavior
+- Job application business logic
+- JWT generation and validation
+- Application controller behavior
+- Security and authorization
+- AI controller behavior
+- Spring application context
+
+Run the backend tests with:
+
+```bash
+cd backend
+mvn test
+```
+
+### Frontend
+
+The frontend test suite uses Vitest and React Testing Library.
+
+Run the frontend tests with:
+
+```bash
+cd frontend
+npm test
+```
+
+The frontend production build can also be verified with:
+
+```bash
+npm run build
+```
+
+---
+
+## Security
 
 CareerPilot implements several backend security controls:
 
@@ -417,9 +529,9 @@ The current frontend uses browser local storage for JWT persistence. For a produ
 
 ---
 
-## ✦ Current Development Status
+## Project Status
 
-CareerPilot currently includes:
+CareerPilot's core functionality is complete.
 
 - [x] Full application CRUD
 - [x] PostgreSQL persistence
@@ -428,8 +540,7 @@ CareerPilot currently includes:
 - [x] Status history
 - [x] Application progress timeline
 - [x] Analytics dashboard
-- [x] User registration
-- [x] User login
+- [x] User registration and login
 - [x] BCrypt password hashing
 - [x] JWT authentication
 - [x] Protected REST APIs
@@ -437,35 +548,38 @@ CareerPilot currently includes:
 - [x] AI job description analysis
 - [x] Dedicated AI Assistant interface
 - [x] Formatted AI responses
-[x] Automated backend tests
-[x] Automated frontend tests
-[x] Docker containerization
-[ ] Production deployment
+- [x] Automated backend tests
+- [x] Automated frontend tests
+- [x] Docker containerization
+- [ ] Production deployment
+
+Production deployment is intentionally left as a future option. The application can currently be run locally through Docker Compose.
 
 ---
 
-## ✦ Planned Improvements
+## Potential Future Improvements
 
-Upcoming engineering work includes:
+CareerPilot is feature-complete for its current scope. Possible future enhancements include:
 
-- Automated backend and frontend testing
 - Stronger request validation
-- Improved API error handling
-- AI usage controls and error handling
-- Docker containerization
-- Production deployment
+- Expanded API error handling
+- AI usage limits and additional failure handling
 - Additional analytics based on application history
+- HttpOnly cookie-based authentication
+- Production deployment
+
+These are potential extensions rather than requirements for the current version.
 
 ---
 
-## ✦ Why I Built CareerPilot
+## Why I Built CareerPilot
 
 Job searching involves more than keeping a list of applications. Candidates need to track opportunities, understand where they are in the hiring pipeline, identify patterns in their search, and prepare differently for each role.
 
-CareerPilot brings those workflows into one full-stack application while also serving as a practical exploration of backend architecture, authentication and authorization, relational data modeling, REST API design, frontend state management, and AI API integration.
+CareerPilot brings those workflows into one full-stack application while also serving as a practical exploration of backend architecture, authentication and authorization, relational data modeling, REST API design, frontend state management, automated testing, containerization, and AI API integration.
 
 ---
 
-## ✦ Author
+## Author
 
 Built by Soraya M.
