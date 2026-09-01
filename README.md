@@ -551,27 +551,6 @@ CareerPilot's core functionality is complete.
 - [x] Automated backend tests
 - [x] Automated frontend tests
 - [x] Docker containerization
-- [ ] Production deployment
-
-Production deployment is intentionally left as a future option. The application can currently be run locally through Docker Compose.
-
----
-
-## Potential Future Improvements
-
-CareerPilot is feature-complete for its current scope. Possible future enhancements include:
-
-- Stronger request validation
-- Expanded API error handling
-- AI usage limits and additional failure handling
-- Additional analytics based on application history
-- HttpOnly cookie-based authentication
-- Production deployment
-
-These are potential extensions rather than requirements for the current version.
-
----
-
 ## Why I Built CareerPilot
 
 Job searching involves more than keeping a list of applications. Candidates need to track opportunities, understand where they are in the hiring pipeline, identify patterns in their search, and prepare differently for each role.
