@@ -437,10 +437,10 @@ CareerPilot currently includes:
 - [x] AI job description analysis
 - [x] Dedicated AI Assistant interface
 - [x] Formatted AI responses
-- [ ] Automated backend tests
-- [ ] Automated frontend tests
-- [ ] Docker containerization
-- [ ] Production deployment
+[x] Automated backend tests
+[x] Automated frontend tests
+[x] Docker containerization
+[ ] Production deployment
 
 ---
 

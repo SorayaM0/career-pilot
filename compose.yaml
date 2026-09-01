@@ -1,0 +1,55 @@
+services:
+
+  postgres:
+    image: postgres:17
+
+    container_name: career-pilot-postgres
+
+    environment:
+      POSTGRES_DB: career_pilot
+      POSTGRES_USER: careerpilot
+      POSTGRES_PASSWORD: careerpilot
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - career_pilot_postgres_data:/var/lib/postgresql/data
+
+
+  backend:
+    build:
+      context: ./backend
+
+    container_name: career-pilot-backend
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/career_pilot
+      SPRING_DATASOURCE_USERNAME: careerpilot
+      SPRING_DATASOURCE_PASSWORD: careerpilot
+
+      JWT_SECRET: ${JWT_SECRET}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+
+    ports:
+      - "8080:8080"
+
+    depends_on:
+      - postgres
+
+
+  frontend:
+    build:
+      context: ./frontend
+
+    container_name: career-pilot-frontend
+
+    ports:
+      - "5173:80"
+
+    depends_on:
+      - backend
+
+
+volumes:
+  career_pilot_postgres_data:
